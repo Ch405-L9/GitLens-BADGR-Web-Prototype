@@ -9,7 +9,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [location] = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,11 +32,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { name: "Services", href: "#services" },
     { name: "Pricing", href: "#pricing" },
     { name: "Sample Report", href: "#proof" },
+    { name: "Portfolio", href: "/portfolio" },
     { name: "FAQ", href: "#faq" },
   ];
 
   const scrollToSection = (id: string) => {
     setIsMenuOpen(false);
+
+    if (id.startsWith("/")) {
+      return;
+    }
+
+    if (location !== "/") {
+      window.location.href = `/${id}`;
+      return;
+    }
+
     const element = document.querySelector(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
@@ -71,16 +83,26 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </Link>
           <div className="hidden items-center gap-6 md:flex">
-            {navItems.map(item => (
-              <button
-                key={item.name}
-                type="button"
-                onClick={() => scrollToSection(item.href)}
-                className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground/80 transition-colors hover:text-primary"
-              >
-                {item.name}
-              </button>
-            ))}
+            {navItems.map(item =>
+              item.href.startsWith("/") ? (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground/80 transition-colors hover:text-primary"
+                >
+                  {item.name}
+                </Link>
+              ) : (
+                <button
+                  key={item.name}
+                  type="button"
+                  onClick={() => scrollToSection(item.href)}
+                  className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground/80 transition-colors hover:text-primary"
+                >
+                  {item.name}
+                </button>
+              )
+            )}
             <Button
               variant="outline"
               size="sm"
@@ -93,6 +115,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <button
             className="p-2 text-foreground md:hidden"
             type="button"
+            aria-label={isMenuOpen ? "Close navigation" : "Open navigation"}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-nav"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -106,16 +129,27 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             id="mobile-nav"
             className="animate-in slide-in-from-top-5 absolute top-full left-0 right-0 flex flex-col gap-4 border-b border-primary bg-background p-4 md:hidden"
           >
-            {navItems.map(item => (
-              <button
-                key={item.name}
-                type="button"
-                onClick={() => scrollToSection(item.href)}
-                className="border-l-2 border-transparent py-2 pl-4 text-left text-lg font-medium transition-all hover:border-primary hover:text-primary"
-              >
-                {item.name}
-              </button>
-            ))}
+            {navItems.map(item =>
+              item.href.startsWith("/") ? (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className="border-l-2 border-transparent py-2 pl-4 text-left text-lg font-medium transition-all hover:border-primary hover:text-primary"
+                >
+                  {item.name}
+                </Link>
+              ) : (
+                <button
+                  key={item.name}
+                  type="button"
+                  onClick={() => scrollToSection(item.href)}
+                  className="border-l-2 border-transparent py-2 pl-4 text-left text-lg font-medium transition-all hover:border-primary hover:text-primary"
+                >
+                  {item.name}
+                </button>
+              )
+            )}
             <Button
               className="mt-4 w-full bg-primary font-mono uppercase text-primary-foreground"
               onClick={() => scrollToSection("#audit")}
@@ -222,6 +256,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     Follow-On Services
                   </a>
                 </li>
+                <li>
+                  <Link
+                    href="/portfolio"
+                    className="transition-colors hover:text-foreground"
+                  >
+                    Engineering Portfolio
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -260,6 +302,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     className="transition-colors hover:text-foreground"
                   >
                     Open Sample Report
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/portfolio"
+                    className="transition-colors hover:text-foreground"
+                  >
+                    Engineering Portfolio
                   </Link>
                 </li>
               </ul>

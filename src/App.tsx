@@ -1,17 +1,20 @@
 import { Route, Switch } from "wouter";
 
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
-import PrivacyPolicy from "@/pages/PrivacyPolicy";
-import TermsAndConditions from "@/pages/TermsAndConditions";
-import FutureRoutePage from "@/pages/FutureRoutePage";
-import AdditionalServicesPage from "@/pages/AdditionalServicesPage";
-import SampleReportPage from "@/pages/SampleReportPage";
-
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import AdditionalServicesPage from "@/pages/AdditionalServicesPage";
+import FutureRoutePage from "@/pages/FutureRoutePage";
+import NotFound from "@/pages/NotFound";
+import PortfolioCaseStudyPage from "@/pages/PortfolioCaseStudyPage";
+import PortfolioPage from "@/pages/PortfolioPage";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import SampleReportPage from "@/pages/SampleReportPage";
+import TermsAndConditions from "@/pages/TermsAndConditions";
+
 
 function Router() {
   return (
@@ -20,6 +23,22 @@ function Router() {
       <Route path={"/privacy"} component={PrivacyPolicy} />
       <Route path={"/terms"} component={TermsAndConditions} />
       <Route path={"/sample-report"} component={SampleReportPage} />
+      <Route path={"/portfolio"} component={PortfolioPage} />
+      <Route path={"/portfolio/cwalts"}>
+        {() => <PortfolioCaseStudyPage slug="cwalts" />}
+      </Route>
+      <Route path={"/portfolio/badgr-bolt"}>
+        {() => <PortfolioCaseStudyPage slug="badgr-bolt" />}
+      </Route>
+      <Route path={"/portfolio/badgr-harness"}>
+        {() => <PortfolioCaseStudyPage slug="badgr-harness" />}
+      </Route>
+      <Route path={"/portfolio/badgr-ai-ops"}>
+        {() => <PortfolioCaseStudyPage slug="badgr-ai-ops" />}
+      </Route>
+      <Route path={"/portfolio/web-ops"}>
+        {() => <PortfolioCaseStudyPage slug="web-ops" />}
+      </Route>
       <Route path={"/partners"}>
         {() => <FutureRoutePage title="Partners" routePath="/partners" />}
       </Route>
